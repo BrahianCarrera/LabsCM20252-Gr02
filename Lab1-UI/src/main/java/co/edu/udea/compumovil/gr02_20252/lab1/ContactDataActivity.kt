@@ -6,6 +6,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
@@ -21,8 +22,10 @@ val paisesLatinoamerica = listOf(
 )
 
 @Composable
-fun TelField() {
-    var tel by remember { mutableStateOf("") }
+fun TelField(
+    value: String,
+    onValueChange: (String) -> Unit
+) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             imageVector = Icons.Filled.Phone,
@@ -30,8 +33,8 @@ fun TelField() {
             modifier = Modifier.size(36.dp).padding(end = 8.dp)
         )
         OutlinedTextField(
-            value = tel,
-            onValueChange = { tel = it },
+            value = value,
+            onValueChange = onValueChange,
             label = { Text("Teléfono") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             modifier = Modifier.fillMaxWidth()
@@ -41,8 +44,10 @@ fun TelField() {
 }
 
 @Composable
-fun AddressField() {
-    var address by remember { mutableStateOf("") }
+fun AddressField(
+    value: String,
+    onValueChange: (String) -> Unit
+) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             imageVector = Icons.Filled.Home,
@@ -50,8 +55,8 @@ fun AddressField() {
             modifier = Modifier.size(36.dp).padding(end = 8.dp)
         )
         OutlinedTextField(
-            value = address,
-            onValueChange = { address = it },
+            value = value,
+            onValueChange = onValueChange,
             label = { Text("Dirección") },
             keyboardOptions = KeyboardOptions(
                 autoCorrect = false,
@@ -64,8 +69,10 @@ fun AddressField() {
 }
 
 @Composable
-fun EmailField() {
-    var email by remember { mutableStateOf("") }
+fun EmailField(
+    value: String,
+    onValueChange: (String) -> Unit
+) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             imageVector = Icons.Filled.Email,
@@ -73,8 +80,8 @@ fun EmailField() {
             modifier = Modifier.size(36.dp).padding(end = 8.dp)
         )
         OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
+            value = value,
+            onValueChange = onValueChange,
             label = { Text("Email") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             modifier = Modifier.fillMaxWidth()
@@ -85,9 +92,12 @@ fun EmailField() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Country(paises: List<String>) {
+fun Country(
+    paises: List<String>,
+    value: String,
+    onValueChange: (String) -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
-    var text by remember { mutableStateOf("") }
 
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
@@ -101,9 +111,9 @@ fun Country(paises: List<String>) {
             modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = text,
+                value = value,
                 onValueChange = {
-                    text = it
+                    onValueChange(it)
                     expanded = true
                 },
                 label = { Text("País") },
@@ -115,7 +125,7 @@ fun Country(paises: List<String>) {
                 onDismissRequest = { expanded = false }
             ) {
                 val filteredPaises = paises.filter {
-                    it.contains(text, ignoreCase = true)
+                    it.contains(value, ignoreCase = true)
                 }
                 if (filteredPaises.isEmpty()) {
                     DropdownMenuItem(
@@ -127,7 +137,7 @@ fun Country(paises: List<String>) {
                         DropdownMenuItem(
                             text = { Text(pais) },
                             onClick = {
-                                text = pais
+                                onValueChange(pais)
                                 expanded = false
                             }
                         )
@@ -141,16 +151,34 @@ fun Country(paises: List<String>) {
 
 @Composable
 fun ContactDataScreen(navController: NavHostController) {
+    var telefono by rememberSaveable { mutableStateOf("") }
+    var direccion by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var pais by rememberSaveable { mutableStateOf("") }
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .padding(horizontal = 24.dp, vertical = 48.dp)
                 .align(Alignment.TopCenter)
         ) {
-            TelField()
-            AddressField()
-            EmailField()
-            Country(paisesLatinoamerica)
+            TelField(
+                value = telefono,
+                onValueChange = { telefono = it }
+            )
+            AddressField(
+                value = direccion,
+                onValueChange = { direccion = it }
+            )
+            EmailField(
+                value = email,
+                onValueChange = { email = it }
+            )
+            Country(
+                paises = paisesLatinoamerica,
+                value = pais,
+                onValueChange = { pais = it }
+            )
         }
 
         // Botón abajo a la derecha

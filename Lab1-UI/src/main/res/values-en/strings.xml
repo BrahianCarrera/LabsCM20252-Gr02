@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Labs2025S-Gr02</string>
+
+    <!-- ContactDataActivity strings -->
+    <string name="phone">Phone</string>
+    <string name="address">Address</string>
+    <string name="email">Email</string>
+    <string name="country">Country</string>
+    <string name="city">City</string>
+    <string name="field_required">Required field</string>
+    <string name="no_results">No results found</string>
+    <string name="back">Back</string>
+    <string name="save">Save</string>
+    <string name="data_saved">Data saved successfully</string>
+    <string name="complete_required_fields">Please complete all required fields</string>
+
+    <!-- PersonalDataActivity strings -->
+    <string name="name">Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="birth_date">Birth Date</string>
+    <string name="change">Change</string>
+    <string name="education">Education</string>
+    <string name="primary">Primary</string>
+    <string name="secondary">Secondary</string>
+    <string name="high_school">High School</string>
+    <string name="university">University</string>
+    <string name="next">Next</string>
+</resources>
