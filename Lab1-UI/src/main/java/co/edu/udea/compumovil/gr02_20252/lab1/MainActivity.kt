@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
                         FormScreen(navController)
                     }
                     composable("contact_data_screen") {
-                        ContactDataScreen()
+                        ContactDataScreen(navController)
                     }
                 }
 

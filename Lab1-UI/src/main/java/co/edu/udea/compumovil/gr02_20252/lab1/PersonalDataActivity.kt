@@ -1,124 +1,196 @@
 package co.edu.udea.compumovil.gr02_20252.lab1
 
 import android.app.DatePickerDialog
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.School
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Person
+
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import java.util.Calendar
-import androidx.compose.runtime.saveable.rememberSaveable
 
 @Composable
 fun FormScreen(navController: NavHostController) {
-    var name by
-    rememberSaveable { mutableStateOf("") }
+    var name by rememberSaveable { mutableStateOf("") }
     var lastName by rememberSaveable { mutableStateOf("") }
-    var gender  by rememberSaveable { mutableStateOf("Masculino") }
+    var gender by rememberSaveable { mutableStateOf("Masculino") }
     var fecha by rememberSaveable { mutableStateOf("") }
     var schooling by rememberSaveable { mutableStateOf("Primaria") }
+    val context = LocalContext.current
 
-    Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 32.dp ).verticalScroll(rememberScrollState())){
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words,
-                autoCorrectEnabled = false,
-                keyboardType = KeyboardType.Unspecified, imeAction = ImeAction.Next
-            ),
-            label = { Text("Nombre") }
-        )
+    val isLandscape = LocalConfiguration.current.orientation ==
+            android.content.res.Configuration.ORIENTATION_LANDSCAPE
 
-        OutlinedTextField(
-            value = lastName,
-            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words,
-                autoCorrectEnabled = false,
-                keyboardType = KeyboardType.Unspecified, imeAction = ImeAction.Next
-            ),
-            onValueChange = { lastName = it },
-            label = { Text("Apellido") }
-        )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding() // respeta notch y status bar
+            .padding(24.dp)
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        if (isLandscape) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.fillMaxWidth()) {
+                Icon(Icons.Filled.Person, contentDescription = "Persona",  modifier = Modifier.size(36.dp))
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    modifier = Modifier.weight(0.8f),
+                    label = { Text("Nombre") },
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Words,
+                        imeAction = ImeAction.Next
+                    )
+                )
+
+                Icon(Icons.Filled.Person, contentDescription = "Persona",  modifier = Modifier.size(36.dp))
+                OutlinedTextField(
+                    value = lastName,
+                    onValueChange = { lastName = it },
+                    modifier = Modifier.weight(0.8f),
+                    label = { Text("Apellido") },
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Words,
+                        imeAction = ImeAction.Next
+                    )
+                )
+            }
+        } else {
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.fillMaxWidth()){
+            Icon(Icons.Filled.Person, contentDescription = "Persona",  modifier = Modifier.size(36.dp))
+
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("Nombre") },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    imeAction = ImeAction.Next
+                )
+            )
+            }
+
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.fillMaxWidth()) {
+                Icon(
+                    Icons.Filled.Person,
+                    contentDescription = "Persona",
+                    modifier = Modifier.size(36.dp)
+                )
+
+                OutlinedTextField(
+                    value = lastName,
+                    onValueChange = { lastName = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text("Apellido") },
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Words,
+                        imeAction = ImeAction.Next
+                    )
+                )
+            }
+        }
 
         Spacer(Modifier.height(12.dp))
         SexSelector(gender) { gender = it }
 
         Spacer(Modifier.height(12.dp))
-        birthDate (fecha) { fecha = it }
+        BirthDate(fecha) { fecha = it }
 
         Spacer(Modifier.height(12.dp))
         SchoolSelector(schooling) { schooling = it }
 
+        Spacer(Modifier.height(24.dp))
         Button(onClick = {
-            navController.navigate("contact_data_screen")
+            if (name.isNotEmpty() && lastName.isNotEmpty() && fecha.isNotEmpty()) {
+                navController.navigate("contact_data_screen")
+            } else {
+                Log.e("ValidationError", "Rellena todos los campos")
+                Toast.makeText(
+                    context,
+                    "Por favor completa todos los campos obligatorios",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }) {
             Text("Siguiente")
         }
     }
 }
+
 @Composable
 fun SexSelector(selected: String, onSelected: (String) -> Unit) {
     val options = listOf("Masculino", "Femenino")
-
-    Column {
-        Text("Sexo")
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Icon(Icons.Filled.Person, contentDescription = "Persona",modifier = Modifier.size(36.dp))
+        Text("Sexo: ")
         options.forEach { option ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(4.dp)
+                modifier = Modifier.clickable { onSelected(option) }
             ) {
                 RadioButton(
                     selected = (selected == option),
                     onClick = { onSelected(option) }
                 )
-                Text(option, modifier = Modifier.clickable { onSelected(option) })
+                Text(option)
             }
         }
     }
 }
 
 @Composable
-fun birthDate(selectedDate: String, onDateSelected: (String) -> Unit) {
+fun BirthDate(selectedDate: String, onDateSelected: (String) -> Unit) {
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
-    val year = calendar.get(Calendar.YEAR)
-    val month = calendar.get(Calendar.MONTH)
-    val day = calendar.get(Calendar.DAY_OF_MONTH)
-
     val datePickerDialog = DatePickerDialog(
         context,
         { _, y, m, d -> onDateSelected("$d/${m + 1}/$y") },
-        year, month, day
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
     )
 
-    Column {
-        Text("Fecha de nacimiento: $selectedDate")
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Icon(Icons.Filled.DateRange, contentDescription = "Cumpleaños", modifier = Modifier.size(36.dp))
+        Text("Nacimiento: $selectedDate")
         Button(onClick = { datePickerDialog.show() }) {
             Text("Cambiar")
         }
@@ -131,33 +203,44 @@ fun SchoolSelector(selected: String, onSelected: (String) -> Unit) {
     val options = listOf("Primaria", "Secundaria", "Bachillerato", "Universidad")
     var expanded by remember { mutableStateOf(false) }
 
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded }
-    ) {
-        OutlinedTextField(
-            value = selected,
-            onValueChange = {},
-            readOnly = true,
-            label = { Text("Escolaridad") },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            modifier = Modifier.menuAnchor()
-        )
+    Row(verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)){  Icon(Icons.Filled.School, contentDescription = "Educacion", modifier = Modifier.size(36.dp))
 
-        ExposedDropdownMenu(
+        ExposedDropdownMenuBox(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onExpandedChange = { expanded = !expanded }
         ) {
-            options.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(option) },
-                    onClick = {
-                        onSelected(option)
-                        expanded = false
-                    }
-                )
+            OutlinedTextField(
+                value = selected,
+                onValueChange = {},
+                readOnly = true,
+                label = { Text("Escolaridad") },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                options.forEach { option ->
+                    DropdownMenuItem(
+                        text = { Text(option) },
+                        onClick = {
+                            onSelected(option)
+                            expanded = false
+                        }
+                    )
+                }
             }
-        }
-    }
+        }}
+
+
 }
 
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun FormScreenPreview() {
+    FormScreen(navController = rememberNavController())
+}
