@@ -29,25 +29,29 @@ class MainActivity : ComponentActivity() {
                     composable("contact_data_screen") {
                         ContactDataScreen(navController)
                     }
-                }
 
+                }
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Labs2025SGr02Theme {
-        Greeting("Android")
+
+
+
+    @Composable
+    fun Greeting(name: String, modifier: Modifier = Modifier) {
+        Text(
+            text = "Hello $name!",
+            modifier = modifier
+        )
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    fun GreetingPreview() {
+        Labs2025SGr02Theme {
+            Greeting("Android")
+        }
     }
 }
